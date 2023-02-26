@@ -84,6 +84,8 @@ public class ReferenceTest {
                 "}";
 
         Post post = mapper.readValue(postRaw, Post.class);
+
         System.out.println(post.thread().name());
+        assert (post.thread().name().equals(THREAD.name()));
     }
 }

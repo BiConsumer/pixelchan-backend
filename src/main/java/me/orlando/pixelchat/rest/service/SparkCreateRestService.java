@@ -35,7 +35,6 @@ import java.util.function.Function;
 
 public class SparkCreateRestService<M extends Model, P> extends AbstractSparkRestService<M> {
 
-    private final ObjectMapper mapper;
     private final Class<P> partialClass;
     private final Function<P, M> creator;
     private final @Nullable BiConsumer<P, M> then;
@@ -48,8 +47,7 @@ public class SparkCreateRestService<M extends Model, P> extends AbstractSparkRes
             Function<P, M> creator,
             @Nullable BiConsumer<P, M> then
     ) {
-        super(repository, modelClass);
-        this.mapper = mapper;
+        super(mapper, repository, modelClass);
         this.partialClass = partialClass;
         this.creator = creator;
         this.then = then;

@@ -24,19 +24,24 @@
 
 package me.orlando.pixelchat.rest.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchat.repository.Model;
 import me.orlando.pixelchat.repository.Repository;
 import spark.Spark;
 
 public class SparkListAllRestService<M extends Model> extends AbstractSparkRestService<M> {
 
-    public SparkListAllRestService(Repository<M> repository, Class<M> modelClass) {
-        super(repository, modelClass);
+    public SparkListAllRestService(
+            ObjectMapper mapper,
+            Repository<M> repository,
+            Class<M> modelClass
+    ) {
+        super(mapper, repository, modelClass);
     }
 
     @Override
     public void register() {
-        Spark.get(route(), (req, res) -> repository.findAllSync());
+        Spark.get(route(), (req, res) -> repository.findAllSync(), mapper::writeValueAsString);
     }
 
     @Override

@@ -24,17 +24,20 @@
 
 package me.orlando.pixelchat.rest.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchat.repository.Model;
 import me.orlando.pixelchat.repository.ModelProperties;
 import me.orlando.pixelchat.repository.Repository;
 
 public abstract class AbstractSparkRestService<M extends Model> implements SparkRestService<M> {
 
+    protected final ObjectMapper mapper;
     protected final Repository<M> repository;
     protected final Class<M> modelClass;
     protected final String route;
 
-    protected AbstractSparkRestService(Repository<M> repository, Class<M> modelClass) {
+    protected AbstractSparkRestService(ObjectMapper mapper, Repository<M> repository, Class<M> modelClass) {
+        this.mapper = mapper;
         this.repository = repository;
         this.modelClass = modelClass;
 

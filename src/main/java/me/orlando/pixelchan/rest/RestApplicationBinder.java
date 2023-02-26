@@ -29,7 +29,7 @@ import me.orlando.pixelchan.repository.Repository;
 
 public interface RestApplicationBinder {
 
-    <M extends Model> void registerRepository(Class<M> modelClass, Repository<M> repository);
+    <M extends Model> void bindRepository(Class<M> modelClass, Repository<M> repository);
 
     <M extends Model> RestModelBinding<M> bindModel(Class<M> modelClass);
 

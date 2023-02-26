@@ -45,7 +45,7 @@ public class SparkRestApplicationBinder implements RestApplicationBinder {
     }
 
     @Override
-    public <M extends Model> void registerRepository(Class<M> modelClass, Repository<M> repository) {
+    public <M extends Model> void bindRepository(Class<M> modelClass, Repository<M> repository) {
         repositoryMap.put(modelClass, repository);
     }
 

@@ -37,9 +37,19 @@ import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
 
+import java.util.Date;
+import java.util.UUID;
+
 public class PixelchanBootstrap {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
+
+    private final static Forum MAIN_FORUM = new Forum(
+            UUID.randomUUID().toString(),
+            new Date(),
+            "Main Forum",
+            "Principal discussion"
+    );
 
     public static void main(String[] args) {
         Repository<Forum> forumRepository = new MockRepository<>();
@@ -55,14 +65,16 @@ public class PixelchanBootstrap {
                 .configure(SerializationFeature.INDENT_OUTPUT, true);
 
         RestApplication restApplication = RestApplication.sparkApplication(mapper, binder -> {
-            binder.registerRepository(Forum.class, forumRepository);
-            binder.registerRepository(Thread.class, threadRepository);
-            binder.registerRepository(Post.class, postRepository);
+            binder.bindRepository(Forum.class, forumRepository);
+            binder.bindRepository(Thread.class, threadRepository);
+            binder.bindRepository(Post.class, postRepository);
 
             binder.install(new ForumModule());
             binder.install(new ThreadModule());
             binder.install(new PostModule());
         });
+
+        forumRepository.saveSync(MAIN_FORUM);
 
         restApplication.initiate();
         Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));

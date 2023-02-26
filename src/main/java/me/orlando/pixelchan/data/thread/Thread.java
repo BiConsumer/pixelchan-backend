@@ -24,7 +24,7 @@
 
 package me.orlando.pixelchan.data.thread;
 
-import me.orlando.pixelchan.data.forum.Forum;
+import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.jackson.Reference;
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.repository.ModelProperties;
@@ -32,5 +32,5 @@ import me.orlando.pixelchan.repository.ModelProperties;
 import java.util.Date;
 
 @ModelProperties(route = "thread")
-public record Thread(String id, Date createdAt, @Reference Forum forum, String name) implements Model.Dated {
+public record Thread(String id, Date createdAt, @Reference Topic topic, String name) implements Model.Dated {
 }

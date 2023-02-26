@@ -43,7 +43,7 @@ public class ThreadModule implements RestModule {
                 .create(ThreadCreationRequest.class, creationRequest -> new Thread(
                         UUID.randomUUID().toString(),
                         new Date(),
-                        creationRequest.forum(),
+                        creationRequest.topic(),
                         creationRequest.name()
                 ), (creationRequest, thread) -> REPOSITORY_REGISTRY.repository(Post.class).saveSync(
                         new Post(

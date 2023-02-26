@@ -26,8 +26,8 @@ package me.orlando.pixelchan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import me.orlando.pixelchan.data.forum.Forum;
-import me.orlando.pixelchan.data.forum.ForumModule;
+import me.orlando.pixelchan.data.topic.Topic;
+import me.orlando.pixelchan.data.topic.TopicModule;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.post.PostModule;
 import me.orlando.pixelchan.data.thread.Thread;
@@ -44,20 +44,20 @@ public class PixelchanBootstrap {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
-    private final static Forum MAIN_FORUM = new Forum(
+    private final static Topic MAIN_TOPIC = new Topic(
             UUID.randomUUID().toString(),
             new Date(),
-            "Main Forum",
-            "Principal discussion"
+            "Cats",
+            "Talk about cats here."
     );
 
     public static void main(String[] args) {
-        Repository<Forum> forumRepository = new MockRepository<>();
+        Repository<Topic> topicRepository = new MockRepository<>();
         Repository<Thread> threadRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
         REPOSITORY_REGISTRY
-                .register(Forum.class, forumRepository)
+                .register(Topic.class, topicRepository)
                 .register(Thread.class, threadRepository)
                 .register(Post.class, postRepository);
 
@@ -65,16 +65,16 @@ public class PixelchanBootstrap {
                 .configure(SerializationFeature.INDENT_OUTPUT, true);
 
         RestApplication restApplication = RestApplication.sparkApplication(mapper, binder -> {
-            binder.bindRepository(Forum.class, forumRepository);
+            binder.bindRepository(Topic.class, topicRepository);
             binder.bindRepository(Thread.class, threadRepository);
             binder.bindRepository(Post.class, postRepository);
 
-            binder.install(new ForumModule());
+            binder.install(new TopicModule());
             binder.install(new ThreadModule());
             binder.install(new PostModule());
         });
 
-        forumRepository.saveSync(MAIN_FORUM);
+        topicRepository.saveSync(MAIN_TOPIC);
 
         restApplication.initiate();
         Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));

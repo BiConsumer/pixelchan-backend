@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.forum;
+package me.orlando.pixelchan.data.topic;
 
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.repository.ModelProperties;
 
 import java.util.Date;
 
-@ModelProperties(route = "forum")
-public record Forum(String id, Date createdAt, String name, String description) implements Model.Dated {
+@ModelProperties(route = "topic")
+public record Topic(String id, Date createdAt, String name, String description) implements Model.Dated {
 }

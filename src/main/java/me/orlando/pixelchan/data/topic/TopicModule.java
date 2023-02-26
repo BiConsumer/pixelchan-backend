@@ -22,15 +22,15 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.forum;
+package me.orlando.pixelchan.data.topic;
 
 import me.orlando.pixelchan.rest.RestApplicationBinder;
 import me.orlando.pixelchan.rest.RestModule;
 
-public class ForumModule implements RestModule {
+public class TopicModule implements RestModule {
 
     @Override
     public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Forum.class).listAll();
+        binder.bindModel(Topic.class).listAll();
     }
 }

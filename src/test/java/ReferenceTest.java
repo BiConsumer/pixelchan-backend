@@ -25,7 +25,7 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import me.orlando.pixelchan.data.forum.Forum;
+import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.thread.Thread;
 import me.orlando.pixelchan.repository.MockRepository;
@@ -38,17 +38,17 @@ import java.util.UUID;
 
 public class ReferenceTest {
 
-    private final static Forum FORUM = new Forum(
+    private final static Topic TOPIC = new Topic(
             UUID.randomUUID().toString(),
             new Date(),
-            "Testing Forum",
-            "Forum for test purposes."
+            "Testing Topic",
+            "Topic for test purposes."
     );
 
     private final static Thread THREAD = new Thread(
             UUID.randomUUID().toString(),
             new Date(),
-            FORUM,
+            TOPIC,
             "What is a test?"
     );
 
@@ -61,18 +61,18 @@ public class ReferenceTest {
 
     @Test
     public void test() throws JsonProcessingException {
-        Repository<Forum> forumRepository = new MockRepository<>();
+        Repository<Topic> topicRepository = new MockRepository<>();
         Repository<Thread> threadRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
         RepositoryRegistry.getInstance()
-                .register(Forum.class, forumRepository)
+                .register(Topic.class, topicRepository)
                 .register(Thread.class, threadRepository)
                 .register(Post.class, postRepository);
 
         ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
-        forumRepository.saveSync(FORUM);
+        topicRepository.saveSync(TOPIC);
         threadRepository.saveSync(THREAD);
         postRepository.saveSync(POST);
 

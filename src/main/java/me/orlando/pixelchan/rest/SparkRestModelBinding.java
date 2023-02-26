@@ -59,7 +59,7 @@ public class SparkRestModelBinding<M extends Model> implements RestModelBinding<
 
     @Override
     public RestModelBinding<M> listAll() {
-        return service(new SparkListAllRestService<>(binder.repository(modelClass), modelClass));
+        return service(new SparkListAllRestService<>(binder.mapper(), binder.repository(modelClass), modelClass));
     }
 
     @Override

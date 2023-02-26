@@ -22,68 +22,49 @@
  * SOFTWARE.
  */
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+package me.orlando.pixelchan;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import me.orlando.pixelchan.data.forum.Forum;
+import me.orlando.pixelchan.data.forum.ForumModule;
 import me.orlando.pixelchan.data.post.Post;
+import me.orlando.pixelchan.data.post.PostModule;
 import me.orlando.pixelchan.data.thread.Thread;
+import me.orlando.pixelchan.data.thread.ThreadModule;
 import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
-import org.junit.jupiter.api.Test;
+import me.orlando.pixelchan.rest.RestApplication;
 
-import java.util.Date;
-import java.util.UUID;
+public class PixelchanBootstrap {
 
-public class ReferenceTest {
+    private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
-    private final static Forum FORUM = new Forum(
-            UUID.randomUUID().toString(),
-            new Date(),
-            "deez",
-            "nuts"
-    );
-
-    private final static Thread THREAD = new Thread(
-            UUID.randomUUID().toString(),
-            new Date(),
-            FORUM,
-            "deez"
-    );
-
-    private final static Post POST = new Post(
-            UUID.randomUUID().toString(),
-            new Date(),
-            THREAD,
-            "funny"
-    );
-
-    @Test
-    public void test() throws JsonProcessingException {
+    public static void main(String[] args) {
         Repository<Forum> forumRepository = new MockRepository<>();
         Repository<Thread> threadRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
-        RepositoryRegistry.getInstance()
+        REPOSITORY_REGISTRY
                 .register(Forum.class, forumRepository)
                 .register(Thread.class, threadRepository)
                 .register(Post.class, postRepository);
 
-        ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
+        ObjectMapper mapper = new ObjectMapper()
+                .configure(SerializationFeature.INDENT_OUTPUT, true);
 
-        forumRepository.saveSync(FORUM);
-        threadRepository.saveSync(THREAD);
-        postRepository.saveSync(POST);
+        RestApplication restApplication = RestApplication.sparkApplication(mapper, binder -> {
+            binder.registerRepository(Forum.class, forumRepository);
+            binder.registerRepository(Thread.class, threadRepository);
+            binder.registerRepository(Post.class, postRepository);
 
-        String postRaw = "{\n" +
-                "  \"id\" : \"1dc614b1-0e8a-43ea-9d54-fd8e872a5932\",\n" +
-                "  \"createdAt\" : 1677388683551,\n" +
-                "  \"thread\" : \"" + THREAD.id() + "\",\n" +
-                "  \"content\" : \"funny\"\n" +
-                "}";
+            binder.install(new ForumModule());
+            binder.install(new ThreadModule());
+            binder.install(new PostModule());
+        });
 
-        Post post = mapper.readValue(postRaw, Post.class);
-        System.out.println(post.thread().name());
+        restApplication.initiate();
+        Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));
     }
 }

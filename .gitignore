@@ -1,0 +1,10 @@
+# editor
+/.idea/
+
+# output files
+/build/
+/*/build/
+
+# gradle
+/.gradle
+/*/.gradle

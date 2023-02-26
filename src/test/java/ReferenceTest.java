@@ -41,22 +41,22 @@ public class ReferenceTest {
     private final static Forum FORUM = new Forum(
             UUID.randomUUID().toString(),
             new Date(),
-            "deez",
-            "nuts"
+            "Testing Forum",
+            "Forum for test purposes."
     );
 
     private final static Thread THREAD = new Thread(
             UUID.randomUUID().toString(),
             new Date(),
             FORUM,
-            "deez"
+            "What is a test?"
     );
 
     private final static Post POST = new Post(
             UUID.randomUUID().toString(),
             new Date(),
             THREAD,
-            "funny"
+            "I've been wondering what a test is."
     );
 
     @Test

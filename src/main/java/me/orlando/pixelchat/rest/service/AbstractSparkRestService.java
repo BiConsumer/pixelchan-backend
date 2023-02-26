@@ -34,7 +34,7 @@ public abstract class AbstractSparkRestService<M extends Model> implements Spark
     protected final ObjectMapper mapper;
     protected final Repository<M> repository;
     protected final Class<M> modelClass;
-    protected final String route;
+    protected final String modelRoute;
 
     protected AbstractSparkRestService(ObjectMapper mapper, Repository<M> repository, Class<M> modelClass) {
         this.mapper = mapper;
@@ -43,9 +43,9 @@ public abstract class AbstractSparkRestService<M extends Model> implements Spark
 
         if (modelClass.isAnnotationPresent(ModelProperties.class)) {
             ModelProperties modelProperties = modelClass.getAnnotation(ModelProperties.class);
-            route = modelProperties.route();
+            modelRoute = modelProperties.route();
         } else {
-            route = modelClass.getSimpleName();
+            modelRoute = modelClass.getSimpleName();
         }
     }
 

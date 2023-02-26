@@ -46,6 +46,6 @@ public class SparkListAllRestService<M extends Model> extends AbstractSparkRestS
 
     @Override
     public String route() {
-        return "/" + route;
+        return "/" + modelRoute;
     }
 }

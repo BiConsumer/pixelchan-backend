@@ -73,6 +73,6 @@ public class SparkCreateRestService<M extends Model, P> extends AbstractSparkRes
 
     @Override
     public String route() {
-        return "/" + route + "/create";
+        return "/" + modelRoute + "/create";
     }
 }

@@ -39,12 +39,14 @@ import me.orlando.pixelchat.rest.RestApplication;
 
 public class PixelchatBootstrap {
 
+    private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
+
     public static void main(String[] args) {
         Repository<Forum> forumRepository = new MockRepository<>();
         Repository<Thread> threadRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
-        RepositoryRegistry.getInstance()
+        REPOSITORY_REGISTRY
                 .register(Forum.class, forumRepository)
                 .register(Thread.class, threadRepository)
                 .register(Post.class, postRepository);

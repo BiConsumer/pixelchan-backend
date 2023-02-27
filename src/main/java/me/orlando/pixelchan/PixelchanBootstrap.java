@@ -36,6 +36,7 @@ import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
+import me.orlando.pixelchan.util.TestModelFactory;
 
 import java.util.Date;
 import java.util.UUID;
@@ -44,11 +45,20 @@ public class PixelchanBootstrap {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
-    private final static Category MAIN_CATEGORY = new Category(
-            UUID.randomUUID().toString(),
-            new Date(),
-            "Questions",
-            "Ask questions in here."
+    private final static Category CATEGORY = TestModelFactory.category(
+            "Testing",
+            "This is a test category."
+    );
+
+    private final static Topic TOPIC = TestModelFactory.topic(
+            CATEGORY,
+            "What happens if testing test?",
+            0
+    );
+
+    private final static Post POST = TestModelFactory.post(
+            TOPIC,
+            "I've been wondering what a test is."
     );
 
     public static void main(String[] args) {
@@ -74,7 +84,9 @@ public class PixelchanBootstrap {
             binder.install(new PostModule());
         });
 
-        categoryRepository.saveSync(MAIN_CATEGORY);
+        categoryRepository.saveSync(CATEGORY);
+        topicRepository.saveSync(TOPIC);
+        postRepository.saveSync(POST);
 
         restApplication.initiate();
         Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));

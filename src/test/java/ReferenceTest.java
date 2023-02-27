@@ -31,30 +31,20 @@ import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
+import me.orlando.pixelchan.util.TestModelFactory;
 import org.junit.jupiter.api.Test;
-
-import java.util.Date;
-import java.util.UUID;
 
 public class ReferenceTest {
 
-    private final static Category CATEGORY = new Category(
-            UUID.randomUUID().toString(),
-            new Date(),
-            "Testing",
-            "Testing category."
-    );
+    private final static Category CATEGORY = TestModelFactory.category("Testing", "This is a test category.");
 
-    private final static Topic TOPIC = new Topic(
-            UUID.randomUUID().toString(),
-            new Date(),
+    private final static Topic TOPIC = TestModelFactory.topic(
             CATEGORY,
-            "What is a test?"
+            "What happens if testing test?",
+            0
     );
 
-    private final static Post POST = new Post(
-            UUID.randomUUID().toString(),
-            new Date(),
+    private final static Post POST = TestModelFactory.post(
             TOPIC,
             "I've been wondering what a test is."
     );

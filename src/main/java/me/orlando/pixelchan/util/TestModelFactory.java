@@ -22,15 +22,43 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.topic;
+package me.orlando.pixelchan.util;
 
 import me.orlando.pixelchan.data.category.Category;
-import me.orlando.pixelchan.jackson.Reference;
-import me.orlando.pixelchan.repository.Model;
-import me.orlando.pixelchan.repository.ModelProperties;
+import me.orlando.pixelchan.data.post.Post;
+import me.orlando.pixelchan.data.topic.Topic;
 
 import java.util.Date;
+import java.util.UUID;
 
-@ModelProperties(route = "topic")
-public record Topic(String id, Date createdAt, @Reference Category category, String name, int rating) implements Model.Dated {
+public class TestModelFactory {
+
+    public static Category category(String name, String description) {
+        return new Category(
+                UUID.randomUUID().toString(),
+                new Date(),
+                name,
+                description
+        );
+    }
+
+    public static Topic topic(Category category, String name, int rating) {
+        return new Topic(
+                UUID.randomUUID().toString(),
+                new Date(),
+                category,
+                name,
+                rating
+        );
+    }
+
+    public static Post post(Topic topic, String content) {
+        return new Post(
+                UUID.randomUUID().toString(),
+                new Date(),
+                topic,
+                content
+        );
+    }
+
 }

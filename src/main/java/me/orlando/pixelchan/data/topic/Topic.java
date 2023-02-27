@@ -22,10 +22,15 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.thread;
+package me.orlando.pixelchan.data.topic;
 
 import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.jackson.Reference;
+import me.orlando.pixelchan.repository.Model;
+import me.orlando.pixelchan.repository.ModelProperties;
 
-public record ThreadCreationRequest(@Reference Category category, String name, String postContent) {
+import java.util.Date;
+
+@ModelProperties(route = "topic")
+public record Topic(String id, Date createdAt, @Reference Category category, String name) implements Model.Dated {
 }

@@ -39,7 +39,7 @@ public class PostModule implements RestModule {
                 .create(PostCreationRequest.class, creationRequest -> new Post(
                         UUID.randomUUID().toString(),
                         new Date(),
-                        creationRequest.thread(),
+                        creationRequest.topic(),
                         creationRequest.content()
                 ));
     }

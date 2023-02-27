@@ -30,8 +30,8 @@ import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.category.CategoryModule;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.post.PostModule;
-import me.orlando.pixelchan.data.thread.Thread;
-import me.orlando.pixelchan.data.thread.ThreadModule;
+import me.orlando.pixelchan.data.topic.Topic;
+import me.orlando.pixelchan.data.topic.TopicModule;
 import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
@@ -53,12 +53,12 @@ public class PixelchanBootstrap {
 
     public static void main(String[] args) {
         Repository<Category> categoryRepository = new MockRepository<>();
-        Repository<Thread> threadRepository = new MockRepository<>();
+        Repository<Topic> topicRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
         REPOSITORY_REGISTRY
                 .register(Category.class, categoryRepository)
-                .register(Thread.class, threadRepository)
+                .register(Topic.class, topicRepository)
                 .register(Post.class, postRepository);
 
         ObjectMapper mapper = new ObjectMapper()
@@ -66,11 +66,11 @@ public class PixelchanBootstrap {
 
         RestApplication restApplication = RestApplication.sparkApplication(mapper, binder -> {
             binder.bindRepository(Category.class, categoryRepository);
-            binder.bindRepository(Thread.class, threadRepository);
+            binder.bindRepository(Topic.class, topicRepository);
             binder.bindRepository(Post.class, postRepository);
 
             binder.install(new CategoryModule());
-            binder.install(new ThreadModule());
+            binder.install(new TopicModule());
             binder.install(new PostModule());
         });
 

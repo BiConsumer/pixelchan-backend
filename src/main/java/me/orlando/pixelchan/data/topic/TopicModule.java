@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.thread;
+package me.orlando.pixelchan.data.topic;
 
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
@@ -32,15 +32,15 @@ import me.orlando.pixelchan.rest.RestModule;
 import java.util.Date;
 import java.util.UUID;
 
-public class ThreadModule implements RestModule {
+public class TopicModule implements RestModule {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
     @Override
     public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Thread.class)
+        binder.bindModel(Topic.class)
                 .listAll()
-                .create(ThreadCreationRequest.class, creationRequest -> new Thread(
+                .create(TopicCreationRequest.class, creationRequest -> new Topic(
                         UUID.randomUUID().toString(),
                         new Date(),
                         creationRequest.category(),

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.post.Post;
-import me.orlando.pixelchan.data.thread.Thread;
+import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
@@ -45,7 +45,7 @@ public class ReferenceTest {
             "Testing category."
     );
 
-    private final static Thread THREAD = new Thread(
+    private final static Topic TOPIC = new Topic(
             UUID.randomUUID().toString(),
             new Date(),
             CATEGORY,
@@ -55,37 +55,37 @@ public class ReferenceTest {
     private final static Post POST = new Post(
             UUID.randomUUID().toString(),
             new Date(),
-            THREAD,
+            TOPIC,
             "I've been wondering what a test is."
     );
 
     @Test
     public void test() throws JsonProcessingException {
         Repository<Category> categoryRepository = new MockRepository<>();
-        Repository<Thread> threadRepository = new MockRepository<>();
+        Repository<Topic> topicRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
         RepositoryRegistry.getInstance()
                 .register(Category.class, categoryRepository)
-                .register(Thread.class, threadRepository)
+                .register(Topic.class, topicRepository)
                 .register(Post.class, postRepository);
 
         ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
         categoryRepository.saveSync(CATEGORY);
-        threadRepository.saveSync(THREAD);
+        topicRepository.saveSync(TOPIC);
         postRepository.saveSync(POST);
 
         String postRaw = "{\n" +
                 "  \"id\" : \"1dc614b1-0e8a-43ea-9d54-fd8e872a5932\",\n" +
                 "  \"createdAt\" : 1677388683551,\n" +
-                "  \"thread\" : \"" + THREAD.id() + "\",\n" +
+                "  \"thread\" : \"" + TOPIC.id() + "\",\n" +
                 "  \"content\" : \"funny\"\n" +
                 "}";
 
         Post post = mapper.readValue(postRaw, Post.class);
 
-        System.out.println(post.thread().name());
-        assert (post.thread().name().equals(THREAD.name()));
+        System.out.println(post.topic().name());
+        assert (post.topic().name().equals(TOPIC.name()));
     }
 }

@@ -24,8 +24,8 @@
 
 package me.orlando.pixelchan.data.thread;
 
-import me.orlando.pixelchan.data.topic.Topic;
+import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.jackson.Reference;
 
-public record ThreadCreationRequest(@Reference Topic topic, String name, String postContent) {
+public record ThreadCreationRequest(@Reference Category category, String name, String postContent) {
 }

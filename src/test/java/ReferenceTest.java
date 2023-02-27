@@ -25,7 +25,7 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import me.orlando.pixelchan.data.topic.Topic;
+import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.thread.Thread;
 import me.orlando.pixelchan.repository.MockRepository;
@@ -38,17 +38,17 @@ import java.util.UUID;
 
 public class ReferenceTest {
 
-    private final static Topic TOPIC = new Topic(
+    private final static Category CATEGORY = new Category(
             UUID.randomUUID().toString(),
             new Date(),
-            "Testing Topic",
-            "Topic for test purposes."
+            "Testing",
+            "Testing category."
     );
 
     private final static Thread THREAD = new Thread(
             UUID.randomUUID().toString(),
             new Date(),
-            TOPIC,
+            CATEGORY,
             "What is a test?"
     );
 
@@ -61,18 +61,18 @@ public class ReferenceTest {
 
     @Test
     public void test() throws JsonProcessingException {
-        Repository<Topic> topicRepository = new MockRepository<>();
+        Repository<Category> categoryRepository = new MockRepository<>();
         Repository<Thread> threadRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
         RepositoryRegistry.getInstance()
-                .register(Topic.class, topicRepository)
+                .register(Category.class, categoryRepository)
                 .register(Thread.class, threadRepository)
                 .register(Post.class, postRepository);
 
         ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
-        topicRepository.saveSync(TOPIC);
+        categoryRepository.saveSync(CATEGORY);
         threadRepository.saveSync(THREAD);
         postRepository.saveSync(POST);
 

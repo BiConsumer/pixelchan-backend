@@ -26,8 +26,8 @@ package me.orlando.pixelchan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import me.orlando.pixelchan.data.topic.Topic;
-import me.orlando.pixelchan.data.topic.TopicModule;
+import me.orlando.pixelchan.data.category.Category;
+import me.orlando.pixelchan.data.category.CategoryModule;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.post.PostModule;
 import me.orlando.pixelchan.data.thread.Thread;
@@ -44,20 +44,20 @@ public class PixelchanBootstrap {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
-    private final static Topic MAIN_TOPIC = new Topic(
+    private final static Category MAIN_CATEGORY = new Category(
             UUID.randomUUID().toString(),
             new Date(),
-            "Cats",
-            "Talk about cats here."
+            "Questions",
+            "Ask questions in here."
     );
 
     public static void main(String[] args) {
-        Repository<Topic> topicRepository = new MockRepository<>();
+        Repository<Category> categoryRepository = new MockRepository<>();
         Repository<Thread> threadRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
 
         REPOSITORY_REGISTRY
-                .register(Topic.class, topicRepository)
+                .register(Category.class, categoryRepository)
                 .register(Thread.class, threadRepository)
                 .register(Post.class, postRepository);
 
@@ -65,16 +65,16 @@ public class PixelchanBootstrap {
                 .configure(SerializationFeature.INDENT_OUTPUT, true);
 
         RestApplication restApplication = RestApplication.sparkApplication(mapper, binder -> {
-            binder.bindRepository(Topic.class, topicRepository);
+            binder.bindRepository(Category.class, categoryRepository);
             binder.bindRepository(Thread.class, threadRepository);
             binder.bindRepository(Post.class, postRepository);
 
-            binder.install(new TopicModule());
+            binder.install(new CategoryModule());
             binder.install(new ThreadModule());
             binder.install(new PostModule());
         });
 
-        topicRepository.saveSync(MAIN_TOPIC);
+        categoryRepository.saveSync(MAIN_CATEGORY);
 
         restApplication.initiate();
         Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));

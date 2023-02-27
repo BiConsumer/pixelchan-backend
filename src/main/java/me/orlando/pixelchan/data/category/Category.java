@@ -22,15 +22,13 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.topic;
+package me.orlando.pixelchan.data.category;
 
-import me.orlando.pixelchan.rest.RestApplicationBinder;
-import me.orlando.pixelchan.rest.RestModule;
+import me.orlando.pixelchan.repository.Model;
+import me.orlando.pixelchan.repository.ModelProperties;
 
-public class TopicModule implements RestModule {
+import java.util.Date;
 
-    @Override
-    public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Topic.class).listAll();
-    }
+@ModelProperties(route = "category")
+public record Category(String id, Date createdAt, String name, String description) implements Model.Dated {
 }

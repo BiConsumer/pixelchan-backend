@@ -22,35 +22,13 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.rest.service;
+package me.orlando.pixelchan.rest.spark;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.repository.Model;
-import me.orlando.pixelchan.repository.ModelProperties;
-import me.orlando.pixelchan.repository.Repository;
+import me.orlando.pixelchan.rest.RestService;
 
-public abstract class AbstractSparkRestService<M extends Model> implements SparkRestService<M> {
+public interface SparkRestService<M extends Model> extends RestService<M> {
 
-    protected final ObjectMapper mapper;
-    protected final Repository<M> repository;
-    protected final Class<M> modelClass;
-    protected final String modelRoute;
+    void register();
 
-    protected AbstractSparkRestService(ObjectMapper mapper, Repository<M> repository, Class<M> modelClass) {
-        this.mapper = mapper;
-        this.repository = repository;
-        this.modelClass = modelClass;
-
-        if (modelClass.isAnnotationPresent(ModelProperties.class)) {
-            ModelProperties modelProperties = modelClass.getAnnotation(ModelProperties.class);
-            modelRoute = modelProperties.route();
-        } else {
-            modelRoute = modelClass.getSimpleName();
-        }
-    }
-
-    @Override
-    public Class<M> modelClass() {
-        return modelClass;
-    }
 }

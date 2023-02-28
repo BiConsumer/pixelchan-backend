@@ -26,7 +26,7 @@ package me.orlando.pixelchan.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.repository.Model;
-import me.orlando.pixelchan.rest.service.SparkRestService;
+import me.orlando.pixelchan.rest.spark.SparkRestService;
 import spark.Spark;
 
 public class SparkRestApplication implements RestApplication {

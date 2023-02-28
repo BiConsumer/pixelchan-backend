@@ -22,12 +22,14 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.rest.service;
+package me.orlando.pixelchan.rest;
 
 import me.orlando.pixelchan.repository.Model;
 
-public interface SparkRestService<M extends Model> extends RestService<M> {
+public interface RestService<M extends Model> {
 
-    void register();
+    Class<M> modelClass();
+
+    String route();
 
 }

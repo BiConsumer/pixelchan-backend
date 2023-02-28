@@ -25,7 +25,10 @@
 package me.orlando.pixelchan.rest;
 
 import me.orlando.pixelchan.repository.Model;
-import me.orlando.pixelchan.rest.service.*;
+import me.orlando.pixelchan.rest.spark.SparkCreateRestService;
+import me.orlando.pixelchan.rest.spark.SparkGetRestService;
+import me.orlando.pixelchan.rest.spark.SparkListAllRestService;
+import me.orlando.pixelchan.rest.spark.SparkRestService;
 
 import java.util.HashSet;
 import java.util.Set;

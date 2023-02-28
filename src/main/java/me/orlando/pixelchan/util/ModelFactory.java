@@ -35,7 +35,7 @@ public class ModelFactory {
 
     public static Category category(String name, String description) {
         return new Category(
-                UUID.randomUUID().toString(),
+                name,
                 new Date(),
                 name,
                 description

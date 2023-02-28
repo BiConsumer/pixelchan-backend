@@ -31,9 +31,11 @@ import spark.Spark;
 
 public class SparkRestApplication implements RestApplication {
 
+    private final int port;
     private final SparkRestApplicationBinder binder;
 
-    SparkRestApplication(ObjectMapper mapper) {
+    SparkRestApplication(int port, ObjectMapper mapper) {
+        this.port = port;
         binder = new SparkRestApplicationBinder(mapper);
     }
 
@@ -44,7 +46,7 @@ public class SparkRestApplication implements RestApplication {
 
     @Override
     public void initiate() {
-        Spark.port(5000);
+        Spark.port(this.port);
 
         for (SparkRestModelBinding<? extends Model> binding : binder.bindings()) {
             for (SparkRestService<? extends Model> service : binding.services()) {

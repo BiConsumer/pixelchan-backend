@@ -36,8 +36,8 @@ public interface RestApplication {
 
     void shutdown();
 
-    static RestApplication sparkApplication(ObjectMapper mapper, Consumer<RestApplicationBinder> consumer) {
-        RestApplication application = new SparkRestApplication(mapper);
+    static RestApplication sparkApplication(int port, ObjectMapper mapper, Consumer<RestApplicationBinder> consumer) {
+        RestApplication application = new SparkRestApplication(port, mapper);
         consumer.accept(application.binder());
 
         return application;

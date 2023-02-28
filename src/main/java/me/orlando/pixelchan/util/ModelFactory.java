@@ -31,7 +31,7 @@ import me.orlando.pixelchan.data.topic.Topic;
 import java.util.Date;
 import java.util.UUID;
 
-public class TestModelFactory {
+public class ModelFactory {
 
     public static Category category(String name, String description) {
         return new Category(

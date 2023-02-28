@@ -31,20 +31,20 @@ import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
-import me.orlando.pixelchan.util.TestModelFactory;
+import me.orlando.pixelchan.util.ModelFactory;
 import org.junit.jupiter.api.Test;
 
 public class ReferenceTest {
 
-    private final static Category CATEGORY = TestModelFactory.category("Testing", "This is a test category.");
+    private final static Category CATEGORY = ModelFactory.category("Testing", "This is a test category.");
 
-    private final static Topic TOPIC = TestModelFactory.topic(
+    private final static Topic TOPIC = ModelFactory.topic(
             CATEGORY,
             "What happens if testing test?",
             0
     );
 
-    private final static Post POST = TestModelFactory.post(
+    private final static Post POST = ModelFactory.post(
             TOPIC,
             "I've been wondering what a test is."
     );

@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.topic;
+package me.orlando.pixelchan.data.post;
 
-import me.orlando.pixelchan.data.category.Category;
+import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.jackson.Reference;
 
-public record TopicCreationRequest(@Reference Category category, String name, String postContent) {
+public record PostCreateRequest(@Reference Topic topic, String content) {
 }

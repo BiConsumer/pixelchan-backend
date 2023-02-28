@@ -38,8 +38,7 @@ import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
 import me.orlando.pixelchan.util.TestModelFactory;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.Random;
 
 public class PixelchanBootstrap {
 
@@ -83,6 +82,10 @@ public class PixelchanBootstrap {
             binder.install(new TopicModule());
             binder.install(new PostModule());
         });
+
+        for (int i = 0; i < 10; i++) {
+            topicRepository.saveSync(TestModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(-500, 500)));
+        }
 
         categoryRepository.saveSync(CATEGORY);
         topicRepository.saveSync(TOPIC);

@@ -31,6 +31,8 @@ public class CategoryModule implements RestModule {
 
     @Override
     public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Category.class).listAll();
+        binder.bindModel(Category.class)
+                .get()
+                .listAll();
     }
 }

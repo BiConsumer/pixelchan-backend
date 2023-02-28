@@ -25,10 +25,7 @@
 package me.orlando.pixelchan.rest;
 
 import me.orlando.pixelchan.repository.Model;
-import me.orlando.pixelchan.rest.service.RestService;
-import me.orlando.pixelchan.rest.service.SparkCreateRestService;
-import me.orlando.pixelchan.rest.service.SparkListAllRestService;
-import me.orlando.pixelchan.rest.service.SparkRestService;
+import me.orlando.pixelchan.rest.service.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -60,6 +57,11 @@ public class SparkRestModelBinding<M extends Model> implements RestModelBinding<
     @Override
     public RestModelBinding<M> listAll() {
         return service(new SparkListAllRestService<>(binder.mapper(), binder.repository(modelClass), modelClass));
+    }
+
+    @Override
+    public RestModelBinding<M> get() {
+        return service(new SparkGetRestService<>(binder.mapper(), binder.repository(modelClass), modelClass));
     }
 
     @Override

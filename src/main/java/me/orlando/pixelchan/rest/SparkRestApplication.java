@@ -44,11 +44,21 @@ public class SparkRestApplication implements RestApplication {
 
     @Override
     public void initiate() {
+        Spark.port(5000);
+
         for (SparkRestModelBinding<? extends Model> binding : binder.bindings()) {
             for (SparkRestService<? extends Model> service : binding.services()) {
                 service.register();
             }
         }
+
+        Spark.after((request, response) -> {
+            response.header("Content-type", "application/json"); // ;charset=utf-8
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Headers", "X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+            response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        });
+        Spark.options("*", (req, res) -> "{}");
     }
 
     @Override

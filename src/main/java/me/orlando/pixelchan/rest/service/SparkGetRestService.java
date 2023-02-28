@@ -22,10 +22,26 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.post;
+package me.orlando.pixelchan.rest.service;
 
-import me.orlando.pixelchan.data.topic.Topic;
-import me.orlando.pixelchan.jackson.Reference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import me.orlando.pixelchan.repository.Model;
+import me.orlando.pixelchan.repository.Repository;
+import spark.Spark;
 
-public record PostCreationRequest(@Reference Topic topic, String content) {
+public class SparkGetRestService<M extends Model> extends AbstractSparkRestService<M> {
+
+    public SparkGetRestService(ObjectMapper mapper, Repository<M> repository, Class<M> modelClass) {
+        super(mapper, repository, modelClass);
+    }
+
+    @Override
+    public void register() {
+        Spark.get(route(), (req, res) -> repository.findByIdSync(req.params("id")), mapper::writeValueAsString);
+    }
+
+    @Override
+    public String route() {
+        return "/" + modelRoute + "/:id";
+    }
 }

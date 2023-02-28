@@ -22,26 +22,10 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.post;
+package me.orlando.pixelchan.data.topic;
 
-import me.orlando.pixelchan.rest.RestApplicationBinder;
-import me.orlando.pixelchan.rest.RestModule;
+import me.orlando.pixelchan.data.category.Category;
+import me.orlando.pixelchan.jackson.Reference;
 
-import java.util.Date;
-import java.util.UUID;
-
-public class PostModule implements RestModule {
-
-    @Override
-    public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Post.class)
-                .get()
-                .listAll()
-                .create(PostCreateRequest.class, createRequest -> new Post(
-                        UUID.randomUUID().toString(),
-                        new Date(),
-                        createRequest.topic(),
-                        createRequest.content()
-                ));
-    }
+public record TopicCreateRequest(@Reference Category category, String name, String postContent) {
 }

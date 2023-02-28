@@ -39,18 +39,20 @@ public class TopicModule implements RestModule {
     @Override
     public void configure(RestApplicationBinder binder) {
         binder.bindModel(Topic.class)
+                .get()
                 .listAll()
-                .create(TopicCreationRequest.class, creationRequest -> new Topic(
+                .create(TopicCreateRequest.class, creationRequest -> new Topic(
                         UUID.randomUUID().toString(),
                         new Date(),
                         creationRequest.category(),
-                        creationRequest.name()
-                ), (creationRequest, thread) -> REPOSITORY_REGISTRY.repository(Post.class).saveSync(
+                        creationRequest.name(),
+                        0
+                ), (createRequest, thread) -> REPOSITORY_REGISTRY.repository(Post.class).saveSync(
                         new Post(
                                 UUID.randomUUID().toString(),
                                 new Date(),
                                 thread,
-                                creationRequest.postContent()
+                                createRequest.postContent()
                         )
                 ));
     }

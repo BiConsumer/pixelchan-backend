@@ -36,6 +36,8 @@ public interface RestModelBinding<M extends Model> {
 
     RestModelBinding<M> listAll();
 
+    RestModelBinding<M> get();
+
     <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator);
 
     <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, BiConsumer<P, M> then);

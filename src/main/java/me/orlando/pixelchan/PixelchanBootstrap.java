@@ -85,7 +85,7 @@ public class PixelchanBootstrap {
         });
 
         for (int i = 0; i < 10; i++) {
-            Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(-500, 500));
+            Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(100));
             topicRepository.saveSync(topic);
 
             postRepository.saveSync(ModelFactory.randomDatePost(topic, "Test" + i));

@@ -38,6 +38,7 @@ import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
 import me.orlando.pixelchan.util.ModelFactory;
 
+import java.text.ParseException;
 import java.util.Random;
 
 public class PixelchanBootstrap {
@@ -60,7 +61,7 @@ public class PixelchanBootstrap {
             "I've been wondering what a test is."
     );
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         Repository<Category> categoryRepository = new MockRepository<>();
         Repository<Topic> topicRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
@@ -84,7 +85,10 @@ public class PixelchanBootstrap {
         });
 
         for (int i = 0; i < 10; i++) {
-            topicRepository.saveSync(ModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(-500, 500)));
+            Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(-500, 500));
+            topicRepository.saveSync(topic);
+
+            postRepository.saveSync(ModelFactory.randomDatePost(topic, "Test" + i));
         }
 
         categoryRepository.saveSync(CATEGORY);

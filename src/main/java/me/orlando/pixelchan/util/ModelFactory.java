@@ -28,10 +28,17 @@ import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.topic.Topic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ModelFactory {
+
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
 
     public static Category category(String name, String description) {
         return new Category(
@@ -59,6 +66,25 @@ public class ModelFactory {
                 topic,
                 content
         );
+    }
+
+    public static Post randomDatePost(Topic topic, String content) throws ParseException {
+        return new Post(
+                UUID.randomUUID().toString(),
+                dateBetween(DATE_FORMAT.parse("01/01/1900"), new Date()),
+                topic,
+                content
+        );
+    }
+
+    private static Date dateBetween(Date startInclusive, Date endExclusive) {
+        long startMillis = startInclusive.getTime();
+        long endMillis = endExclusive.getTime();
+        long randomMillisSinceEpoch = ThreadLocalRandom
+                .current()
+                .nextLong(startMillis, endMillis);
+
+        return new Date(randomMillisSinceEpoch);
     }
 
 }

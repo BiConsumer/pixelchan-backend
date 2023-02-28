@@ -25,6 +25,7 @@
 package me.orlando.pixelchan.rest;
 
 import me.orlando.pixelchan.repository.Model;
+import me.orlando.pixelchan.rest.service.RestService;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;

@@ -22,30 +22,26 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.rest.spark;
+package me.orlando.pixelchan.rest.service.spark;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.repository.Repository;
 import spark.Spark;
 
-public class SparkListAllRestService<M extends Model> extends AbstractSparkRestService<M> {
+public class SparkGetRestService<M extends Model> extends AbstractSparkRestService<M> {
 
-    public SparkListAllRestService(
-            ObjectMapper mapper,
-            Repository<M> repository,
-            Class<M> modelClass
-    ) {
+    public SparkGetRestService(ObjectMapper mapper, Repository<M> repository, Class<M> modelClass) {
         super(mapper, repository, modelClass);
     }
 
     @Override
     public void register() {
-        Spark.get(route(), (req, res) -> repository.findAllSync(), mapper::writeValueAsString);
+        Spark.get(route(), (req, res) -> repository.findByIdSync(req.params("id")), mapper::writeValueAsString);
     }
 
     @Override
     public String route() {
-        return "/" + modelRoute;
+        return "/" + modelRoute + "/:id";
     }
 }

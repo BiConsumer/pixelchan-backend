@@ -22,26 +22,57 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.rest.spark;
+package me.orlando.pixelchan.rest.service.spark;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.repository.Repository;
+import org.jetbrains.annotations.Nullable;
 import spark.Spark;
 
-public class SparkGetRestService<M extends Model> extends AbstractSparkRestService<M> {
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-    public SparkGetRestService(ObjectMapper mapper, Repository<M> repository, Class<M> modelClass) {
+public class SparkCreateRestService<M extends Model, P> extends AbstractSparkRestService<M> {
+
+    private final Class<P> partialClass;
+    private final Function<P, M> creator;
+    private final @Nullable BiConsumer<P, M> then;
+
+    public SparkCreateRestService(
+            ObjectMapper mapper,
+            Repository<M> repository,
+            Class<M> modelClass,
+            Class<P> partialClass,
+            Function<P, M> creator,
+            @Nullable BiConsumer<P, M> then
+    ) {
         super(mapper, repository, modelClass);
+        this.partialClass = partialClass;
+        this.creator = creator;
+        this.then = then;
     }
 
     @Override
     public void register() {
-        Spark.get(route(), (req, res) -> repository.findByIdSync(req.params("id")), mapper::writeValueAsString);
+        Spark.post(route(), (req, res) -> {
+            res.type("application.json");
+
+            P partial = mapper.readValue(res.body(), partialClass);
+            M model = creator.apply(partial);
+
+            if (then != null) {
+                then.accept(partial, model);
+            }
+
+            repository.saveSync(model);
+
+            return model;
+        }, mapper::writeValueAsString);
     }
 
     @Override
     public String route() {
-        return "/" + modelRoute + "/:id";
+        return "/" + modelRoute + "/create";
     }
 }

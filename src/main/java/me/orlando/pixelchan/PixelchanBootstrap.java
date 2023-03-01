@@ -26,6 +26,7 @@ package me.orlando.pixelchan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import me.orlando.pixelchan.config.CategoryConfig;
 import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.category.CategoryModule;
 import me.orlando.pixelchan.data.post.Post;
@@ -38,7 +39,9 @@ import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
 import me.orlando.pixelchan.util.ModelFactory;
 
+import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Random;
 
 public class PixelchanBootstrap {
@@ -61,7 +64,7 @@ public class PixelchanBootstrap {
             "I've been wondering what a test is."
     );
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, IOException {
         Repository<Category> categoryRepository = new MockRepository<>();
         Repository<Topic> topicRepository = new MockRepository<>();
         Repository<Post> postRepository = new MockRepository<>();
@@ -94,6 +97,15 @@ public class PixelchanBootstrap {
         categoryRepository.saveSync(CATEGORY);
         topicRepository.saveSync(TOPIC);
         postRepository.saveSync(POST);
+
+        CategoryConfig[] categories = mapper.readValue(
+                PixelchanBootstrap.class.getClassLoader().getResource("categories.json"),
+                CategoryConfig[].class
+        );
+
+        for (CategoryConfig category : categories) {
+            categoryRepository.saveSync(ModelFactory.category(category.name(), category.description()));
+        }
 
         restApplication.initiate();
         Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));

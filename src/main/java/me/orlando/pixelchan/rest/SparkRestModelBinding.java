@@ -27,6 +27,7 @@ package me.orlando.pixelchan.rest;
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.rest.service.*;
 import me.orlando.pixelchan.rest.service.spark.*;
+import org.jetbrains.annotations.Nullable;
 import spark.Spark;
 
 import java.util.HashSet;
@@ -85,12 +86,7 @@ public class SparkRestModelBinding<M extends Model> implements RestModelBinding<
     }
 
     @Override
-    public <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator) {
-        return service(new SparkCreateRestService<>(binder.mapper(), binder.repository(modelClass), modelClass, partialClass, creator, null));
-    }
-
-    @Override
-    public <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, BiConsumer<P, M> then) {
+    public <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, @Nullable BiConsumer<P, M> then) {
         return service(new SparkCreateRestService<>(binder.mapper(), binder.repository(modelClass), modelClass, partialClass, creator, then));
     }
 

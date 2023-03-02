@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.rest.service.RestService;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -43,9 +44,12 @@ public interface RestModelBinding<M extends Model> {
 
     RestModelBinding<M> get();
 
-    <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator);
+    <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, @Nullable BiConsumer<P, M> then);
 
-    <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, BiConsumer<P, M> then);
+    default <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator) {
+        return create(partialClass, creator, null);
+    }
+
 
     interface Handler<M extends Model> {
         String handle(ObjectMapper mapper, Repository<M> repository, Map<String, String> params) throws Exception;

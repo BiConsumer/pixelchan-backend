@@ -48,13 +48,13 @@ public class ModelFactory {
         );
     }
 
-    public static Topic topic(Category category, String name, int rating) {
+    public static Topic topic(Category category, String name, int favorites) {
         return new Topic(
                 UUID.randomUUID().toString(),
                 new Date(),
                 category,
                 name,
-                rating
+                favorites
         );
     }
 

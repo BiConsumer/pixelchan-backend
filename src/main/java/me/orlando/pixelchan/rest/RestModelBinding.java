@@ -24,15 +24,20 @@
 
 package me.orlando.pixelchan.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.repository.Model;
+import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.rest.service.RestService;
 
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public interface RestModelBinding<M extends Model> {
 
     RestModelBinding<M> service(RestService<M> service);
+
+    RestModelBinding<M> customGet(String route, Handler<M> handler);
 
     RestModelBinding<M> listAll();
 
@@ -41,5 +46,9 @@ public interface RestModelBinding<M extends Model> {
     <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator);
 
     <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, BiConsumer<P, M> then);
+
+    interface Handler<M extends Model> {
+        String handle(ObjectMapper mapper, Repository<M> repository, Map<String, String> params);
+    }
 
 }

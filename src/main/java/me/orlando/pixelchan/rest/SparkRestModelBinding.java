@@ -26,10 +26,8 @@ package me.orlando.pixelchan.rest;
 
 import me.orlando.pixelchan.repository.Model;
 import me.orlando.pixelchan.rest.service.*;
-import me.orlando.pixelchan.rest.service.spark.SparkCreateRestService;
-import me.orlando.pixelchan.rest.service.spark.SparkGetRestService;
-import me.orlando.pixelchan.rest.service.spark.SparkListAllRestService;
-import me.orlando.pixelchan.rest.service.spark.SparkRestService;
+import me.orlando.pixelchan.rest.service.spark.*;
+import spark.Spark;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,6 +54,26 @@ public class SparkRestModelBinding<M extends Model> implements RestModelBinding<
 
         services.add((SparkRestService<? extends Model>) service);
         return this;
+    }
+
+    @Override
+    public RestModelBinding<M> customGet(String route, Handler<M> handler) {
+
+        SparkRestService<M> restService = new AbstractSparkRestService<M>(binder.mapper(), binder.repository(modelClass), modelClass) {
+            @Override
+            public void register() {
+                Spark.get(route(), (req, res) -> {
+                    return handler.handle(mapper, repository, req.params());
+                });
+            }
+
+            @Override
+            public String route() {
+                return "/" + modelRoute + route;
+            }
+        };
+
+        return service(restService);
     }
 
     @Override

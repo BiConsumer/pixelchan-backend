@@ -40,7 +40,6 @@ import me.orlando.pixelchan.rest.RestApplication;
 import me.orlando.pixelchan.util.ModelFactory;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Random;
 

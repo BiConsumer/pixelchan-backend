@@ -40,6 +40,7 @@ import me.orlando.pixelchan.rest.RestApplication;
 import me.orlando.pixelchan.util.ModelFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Random;
 
@@ -62,6 +63,8 @@ public class PixelchanBootstrapTest {
             TOPIC,
             "I've been wondering what a test is."
     );
+
+    private final static Random RANDOM = new Random();
 
     public static void main(String[] args) throws ParseException, IOException {
         Repository<Category> categoryRepository = new MockRepository<>();
@@ -87,10 +90,17 @@ public class PixelchanBootstrapTest {
         });
 
         for (int i = 0; i < 10; i++) {
-            Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(100));
+            Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, RANDOM.nextInt(100));
             topicRepository.saveSync(topic);
 
             postRepository.saveSync(ModelFactory.randomDatePost(topic, "Test" + i));
+
+            for (int postIndex = 0; postIndex < RANDOM.nextInt(5); postIndex++) {
+                byte[] randomText = new byte[RANDOM.nextInt(50)];
+                RANDOM.nextBytes(randomText);
+
+                postRepository.saveSync(ModelFactory.randomDatePost(topic, new String(randomText, StandardCharsets.UTF_8)));
+            }
         }
 
         categoryRepository.saveSync(CATEGORY);

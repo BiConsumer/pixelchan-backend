@@ -62,7 +62,7 @@ public class TopicModule implements RestModule {
                     return mapper.writeValueAsString(topic);
                 })
                 .handleGet("/unfavorite/:id", (mapper, repository, params) -> {
-                    Topic topic = repository.findByIdSync(params.get("id")).incrementFavorites();
+                    Topic topic = repository.findByIdSync(params.get("id")).decrementFavorites();
                     repository.saveSync(topic);
 
                     return mapper.writeValueAsString(topic);

@@ -25,7 +25,7 @@
 package me.orlando.pixelchan.rest;
 
 import me.orlando.pixelchan.repository.Model;
-import me.orlando.pixelchan.rest.service.*;
+import me.orlando.pixelchan.rest.service.RestService;
 import me.orlando.pixelchan.rest.service.spark.*;
 import org.jetbrains.annotations.Nullable;
 import spark.Spark;

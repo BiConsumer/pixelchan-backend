@@ -37,7 +37,6 @@ import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
-import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.text.ParseException;

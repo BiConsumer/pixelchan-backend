@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan;
+package me.orlando.pixelchan.util;
 
 import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.post.Post;

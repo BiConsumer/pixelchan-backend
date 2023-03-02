@@ -31,6 +31,7 @@ import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
+import me.orlando.pixelchan.util.ModelFactory;
 import org.junit.jupiter.api.Test;
 
 public class ReferenceTest {

@@ -24,12 +24,16 @@
 
 package me.orlando.pixelchan.data.topic;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.orlando.pixelchan.data.post.Post;
+import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplicationBinder;
+import me.orlando.pixelchan.rest.RestModelBinding;
 import me.orlando.pixelchan.rest.RestModule;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class TopicModule implements RestModule {
@@ -54,6 +58,18 @@ public class TopicModule implements RestModule {
                                 thread,
                                 createRequest.postContent()
                         )
-                ));
+                ))
+                .customGet("/favorite/:id", (mapper, repository, params) -> {
+                    Topic topic = repository.findByIdSync(params.get("id")).incrementFavorites();
+                    repository.saveSync(topic);
+
+                    return mapper.writeValueAsString(topic);
+                })
+                .customGet("/unfavorite/:id", (mapper, repository, params) -> {
+                    Topic topic = repository.findByIdSync(params.get("id")).incrementFavorites();
+                    repository.saveSync(topic);
+
+                    return mapper.writeValueAsString(topic);
+                });
     }
 }

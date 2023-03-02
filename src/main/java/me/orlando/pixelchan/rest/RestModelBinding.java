@@ -48,7 +48,7 @@ public interface RestModelBinding<M extends Model> {
     <P> RestModelBinding<M> create(Class<P> partialClass, Function<P, M> creator, BiConsumer<P, M> then);
 
     interface Handler<M extends Model> {
-        String handle(ObjectMapper mapper, Repository<M> repository, Map<String, String> params);
+        String handle(ObjectMapper mapper, Repository<M> repository, Map<String, String> params) throws Exception;
     }
 
 }

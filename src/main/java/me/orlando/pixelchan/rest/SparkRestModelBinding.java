@@ -62,9 +62,7 @@ public class SparkRestModelBinding<M extends Model> implements RestModelBinding<
         SparkRestService<M> restService = new AbstractSparkRestService<M>(binder.mapper(), binder.repository(modelClass), modelClass) {
             @Override
             public void register() {
-                Spark.get(route(), (req, res) -> {
-                    return handler.handle(mapper, repository, req.params());
-                });
+                Spark.get(route(), (req, res) -> handler.handle(mapper, repository, req.params()));
             }
 
             @Override

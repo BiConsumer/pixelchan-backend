@@ -33,4 +33,17 @@ import java.util.Date;
 
 @ModelProperties(route = "topic")
 public record Topic(String id, Date createdAt, @Reference Category category, String name, int favorites) implements Model.Dated {
+
+    Topic favorites(int favorites) {
+        return new Topic(id, createdAt, category, name, favorites);
+    }
+
+    Topic incrementFavorites() {
+        return new Topic(id, createdAt, category, name, this.favorites+1);
+    }
+
+    Topic decrementFavorites() {
+        return new Topic(id, createdAt, category, name, this.favorites+1);
+    }
+
 }

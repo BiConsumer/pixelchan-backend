@@ -57,7 +57,7 @@ public class SparkRestModelBinding<M extends Model> implements RestModelBinding<
     }
 
     @Override
-    public RestModelBinding<M> customGet(String route, Handler<M> handler) {
+    public RestModelBinding<M> handleGet(String route, Handler<M> handler) {
 
         SparkRestService<M> restService = new AbstractSparkRestService<M>(binder.mapper(), binder.repository(modelClass), modelClass) {
             @Override

@@ -37,7 +37,7 @@ public interface RestModelBinding<M extends Model> {
 
     RestModelBinding<M> service(RestService<M> service);
 
-    RestModelBinding<M> customGet(String route, Handler<M> handler);
+    RestModelBinding<M> handleGet(String route, Handler<M> handler);
 
     RestModelBinding<M> listAll();
 

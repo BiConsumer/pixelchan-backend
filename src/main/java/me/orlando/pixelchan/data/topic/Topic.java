@@ -43,7 +43,7 @@ public record Topic(String id, Date createdAt, @Reference Category category, Str
     }
 
     Topic decrementFavorites() {
-        return new Topic(id, createdAt, category, name, this.favorites+1);
+        return new Topic(id, createdAt, category, name, this.favorites-1);
     }
 
 }

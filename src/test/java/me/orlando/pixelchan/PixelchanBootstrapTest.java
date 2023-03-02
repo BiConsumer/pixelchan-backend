@@ -96,10 +96,7 @@ public class PixelchanBootstrapTest {
             postRepository.saveSync(ModelFactory.randomDatePost(topic, "Test" + i));
 
             for (int postIndex = 0; postIndex < RANDOM.nextInt(5); postIndex++) {
-                byte[] randomText = new byte[RANDOM.nextInt(50)];
-                RANDOM.nextBytes(randomText);
-
-                postRepository.saveSync(ModelFactory.randomDatePost(topic, new String(randomText, StandardCharsets.UTF_8)));
+                postRepository.saveSync(ModelFactory.randomDatePost(topic, generateRandomText(RANDOM.nextInt(1000))));
             }
         }
 
@@ -118,5 +115,16 @@ public class PixelchanBootstrapTest {
 
         restApplication.initiate();
         Runtime.getRuntime().addShutdownHook(new Thread(restApplication::shutdown));
+    }
+
+    private static String generateRandomText(int length) {
+        int leftLimit = 48;
+        int rightLimit = 122;
+
+        return RANDOM.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(length)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }

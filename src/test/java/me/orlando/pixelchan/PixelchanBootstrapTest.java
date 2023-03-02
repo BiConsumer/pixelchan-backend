@@ -26,6 +26,7 @@ package me.orlando.pixelchan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import me.orlando.pixelchan.config.CategoryConfig;
 import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.category.CategoryModule;
 import me.orlando.pixelchan.data.post.Post;
@@ -36,13 +37,31 @@ import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Random;
 
-public class PixelchanBootstrap {
+public class PixelchanBootstrapTest {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
+
+    private final static Category CATEGORY = ModelFactory.category(
+            "Testing",
+            "This is a test category."
+    );
+
+    private final static Topic TOPIC = ModelFactory.topic(
+            CATEGORY,
+            "What happens if testing test?",
+            0
+    );
+
+    private final static Post POST = ModelFactory.post(
+            TOPIC,
+            "I've been wondering what a test is."
+    );
 
     public static void main(String[] args) throws ParseException, IOException {
         Repository<Category> categoryRepository = new MockRepository<>();
@@ -67,7 +86,27 @@ public class PixelchanBootstrap {
             binder.install(new PostModule());
         });
 
+        for (int i = 0; i < 10; i++) {
+            Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, new Random().nextInt(100));
+            topicRepository.saveSync(topic);
+
+            postRepository.saveSync(ModelFactory.randomDatePost(topic, "Test" + i));
+        }
+
+        categoryRepository.saveSync(CATEGORY);
+        topicRepository.saveSync(TOPIC);
+        postRepository.saveSync(POST);
+
+        CategoryConfig[] categories = mapper.readValue(
+                PixelchanBootstrapTest.class.getClassLoader().getResource("categories.json"),
+                CategoryConfig[].class
+        );
+
+        for (CategoryConfig category : categories) {
+            categoryRepository.saveSync(ModelFactory.category(category.name(), category.description()));
+        }
+
         restApplication.initiate();
-        Runtime.getRuntime().addShutdownHook(new java.lang.Thread(restApplication::shutdown));
+        Runtime.getRuntime().addShutdownHook(new Thread(restApplication::shutdown));
     }
 }

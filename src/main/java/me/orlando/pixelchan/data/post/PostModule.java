@@ -37,11 +37,17 @@ public class PostModule implements RestModule {
         binder.bindModel(Post.class)
                 .get()
                 .listAll()
-                .create(PostCreateRequest.class, createRequest -> new Post(
-                        UUID.randomUUID().toString(),
-                        new Date(),
-                        createRequest.topic(),
-                        createRequest.content()
-                ));
+                .create(PostCreateRequest.class, createRequest -> {
+                    if (createRequest.content().isBlank()) {
+                        throw new IllegalArgumentException("Content cannot be blank");
+                    }
+
+                    return new Post(
+                            UUID.randomUUID().toString(),
+                            new Date(),
+                            createRequest.topic(),
+                            createRequest.content()
+                    );
+                });
     }
 }

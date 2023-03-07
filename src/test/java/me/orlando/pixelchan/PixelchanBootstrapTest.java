@@ -92,7 +92,7 @@ public class PixelchanBootstrapTest {
             Topic topic = ModelFactory.topic(CATEGORY, "Test" + i, RANDOM.nextInt(100));
             topicRepository.saveSync(topic);
 
-            for (int postIndex = 0; postIndex < RANDOM.nextInt(5); postIndex++) {
+            for (int postIndex = 0; postIndex < RANDOM.nextInt(1, 5); postIndex++) {
                 postRepository.saveSync(ModelFactory.randomDatePost(topic, generateRandomText(RANDOM.nextInt(1000))));
             }
         }

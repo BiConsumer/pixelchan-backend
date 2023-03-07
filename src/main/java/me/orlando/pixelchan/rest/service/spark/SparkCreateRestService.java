@@ -58,7 +58,7 @@ public class SparkCreateRestService<M extends Model, P> extends AbstractSparkRes
         Spark.post(route(), (req, res) -> {
             res.type("application.json");
 
-            P partial = mapper.readValue(res.body(), partialClass);
+            P partial = mapper.readValue(req.body(), partialClass);
             M model = creator.apply(partial);
 
             if (then != null) {
@@ -73,6 +73,6 @@ public class SparkCreateRestService<M extends Model, P> extends AbstractSparkRes
 
     @Override
     public String route() {
-        return "/" + modelRoute + "/create";
+        return "/" + modelRoute;
     }
 }

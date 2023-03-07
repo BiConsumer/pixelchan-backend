@@ -24,6 +24,8 @@
 
 package me.orlando.pixelchan.data.post;
 
+import me.orlando.pixelchan.data.topic.Topic;
+import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplicationBinder;
 import me.orlando.pixelchan.rest.RestModule;
 
@@ -31,6 +33,8 @@ import java.util.Date;
 import java.util.UUID;
 
 public class PostModule implements RestModule {
+
+    private final static RepositoryRegistry REGISTRY = RepositoryRegistry.getInstance();
 
     @Override
     public void configure(RestApplicationBinder binder) {
@@ -40,6 +44,10 @@ public class PostModule implements RestModule {
                 .create(PostCreateRequest.class, createRequest -> {
                     if (createRequest.content().isBlank()) {
                         throw new IllegalArgumentException("Content cannot be blank");
+                    }
+
+                    if (!REGISTRY.repository(Topic.class).existsByIdSync(createRequest.topic().id())) {
+                        throw new IllegalArgumentException("No topic with that id found");
                     }
 
                     return new Post(

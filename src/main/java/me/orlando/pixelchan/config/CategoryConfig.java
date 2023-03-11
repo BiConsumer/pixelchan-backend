@@ -24,5 +24,5 @@
 
 package me.orlando.pixelchan.config;
 
-public record CategoryConfig(String name, String description) {
+public record CategoryConfig(String name) {
 }

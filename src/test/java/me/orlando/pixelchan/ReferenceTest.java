@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 
 public class ReferenceTest {
 
-    private final static Category CATEGORY = ModelFactory.category("Testing", "This is a test category.");
+    private final static Category CATEGORY = ModelFactory.category("Testing");
 
     private final static Topic TOPIC = ModelFactory.topic(
             CATEGORY,

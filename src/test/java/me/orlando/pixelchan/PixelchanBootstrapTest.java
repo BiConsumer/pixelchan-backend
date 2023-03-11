@@ -48,8 +48,7 @@ public class PixelchanBootstrapTest {
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
     private final static Category CATEGORY = ModelFactory.category(
-            "Testing",
-            "This is a test category."
+            "Testing"
     );
 
     private final static Topic TOPIC = ModelFactory.topic(
@@ -107,7 +106,7 @@ public class PixelchanBootstrapTest {
         );
 
         for (CategoryConfig category : categories) {
-            categoryRepository.saveSync(ModelFactory.category(category.name(), category.description()));
+            categoryRepository.saveSync(ModelFactory.category(category.name()));
         }
 
         restApplication.initiate();

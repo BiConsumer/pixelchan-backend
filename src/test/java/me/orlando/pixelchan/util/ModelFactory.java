@@ -39,12 +39,10 @@ public class ModelFactory {
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
 
-    public static Category category(String name, String description) {
+    public static Category category(String name) {
         return new Category(
                 name,
-                new Date(),
-                name,
-                description
+                new Date()
         );
     }
 

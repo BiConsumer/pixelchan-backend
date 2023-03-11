@@ -30,5 +30,5 @@ import me.orlando.pixelchan.repository.ModelProperties;
 import java.util.Date;
 
 @ModelProperties(route = "category")
-public record Category(String id, Date createdAt, String name, String description) implements Model.Dated {
+public record Category(String id, Date createdAt) implements Model.Dated {
 }

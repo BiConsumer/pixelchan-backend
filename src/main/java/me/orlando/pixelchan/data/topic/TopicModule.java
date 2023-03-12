@@ -39,12 +39,10 @@ import java.util.UUID;
 public class TopicModule implements RestModule {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
-    private final static Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
+    private final Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
     @Override
     public void configure(RestApplicationBinder binder) {
         binder.bindModel(Topic.class)
-                .get()
-                .listAll()
                 .create(TopicCreateRequest.class, creationRequest -> new Topic(
                         UUID.randomUUID().toString(),
                         new Date(),
@@ -76,13 +74,14 @@ public class TopicModule implements RestModule {
                     }
 
                     return mapper.writeValueAsString(topic);
-                }).handleGet("/displays", ((mapper, repository, params) -> {
+                })
+                .handleGet("/displays/", ((mapper, repository, params) -> {
                     Set<TopicDisplay> displays = new HashSet<>();
                     for (Topic topic : repository.findAllSync()) {
                         displays.add(TopicDisplay.fromTopic(topic, POST_REPOSITORY));
                     }
 
                     return mapper.writeValueAsString(displays);
-                }));
+                })).get().listAll();
     }
 }

@@ -39,21 +39,21 @@ public class CategoryModule implements RestModule {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
 
-    private final static Repository<Topic> TOPIC_REPOSITORY = REPOSITORY_REGISTRY.repository(Topic.class);
-    private final static Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
+    private final Repository<Topic> TOPIC_REPOSITORY = REPOSITORY_REGISTRY.repository(Topic.class);
+    private final Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
 
     @Override
     public void configure(RestApplicationBinder binder) {
         binder.bindModel(Category.class)
-                .get()
-                .listAll()
-                .handleGet("/displays", ((mapper, repository, params) -> {
+                .handleGet("/displays/", ((mapper, repository, params) -> {
                     Set<CategoryDisplay> displays = new HashSet<>();
                     for (Category category : repository.findAllSync()) {
                         displays.add(CategoryDisplay.fromCategory(category, TOPIC_REPOSITORY, POST_REPOSITORY));
                     }
 
                     return mapper.writeValueAsString(displays);
-                }));
+                }))
+                .get()
+                .listAll();
     }
 }

@@ -24,18 +24,22 @@
 
 package me.orlando.pixelchan.data.topic;
 
+import me.orlando.pixelchan.data.display.TopicDisplay;
 import me.orlando.pixelchan.data.post.Post;
+import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplicationBinder;
 import me.orlando.pixelchan.rest.RestModule;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class TopicModule implements RestModule {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
-
+    private final static Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
     @Override
     public void configure(RestApplicationBinder binder) {
         binder.bindModel(Topic.class)
@@ -47,7 +51,7 @@ public class TopicModule implements RestModule {
                         creationRequest.category(),
                         creationRequest.name(),
                         0
-                ), (createRequest, thread) -> REPOSITORY_REGISTRY.repository(Post.class).saveSync(
+                ), (createRequest, thread) -> POST_REPOSITORY.saveSync(
                         new Post(
                                 UUID.randomUUID().toString(),
                                 new Date(),
@@ -72,6 +76,13 @@ public class TopicModule implements RestModule {
                     }
 
                     return mapper.writeValueAsString(topic);
-                });
+                }).handleGet("/displays", ((mapper, repository, params) -> {
+                    Set<TopicDisplay> displays = new HashSet<>();
+                    for (Topic topic : repository.findAllSync()) {
+                        displays.add(TopicDisplay.fromTopic(topic, POST_REPOSITORY));
+                    }
+
+                    return mapper.writeValueAsString(displays);
+                }));
     }
 }

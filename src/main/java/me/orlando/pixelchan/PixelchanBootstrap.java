@@ -34,7 +34,6 @@ import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.post.PostModule;
 import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.data.topic.TopicModule;
-import me.orlando.pixelchan.repository.MockRepository;
 import me.orlando.pixelchan.repository.Repository;
 import me.orlando.pixelchan.repository.RepositoryRegistry;
 import me.orlando.pixelchan.rest.RestApplication;

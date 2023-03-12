@@ -22,38 +22,29 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.category;
+package me.orlando.pixelchan.data.display;
 
-import me.orlando.pixelchan.data.display.CategoryDisplay;
+import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.repository.Repository;
-import me.orlando.pixelchan.repository.RepositoryRegistry;
-import me.orlando.pixelchan.rest.RestApplicationBinder;
-import me.orlando.pixelchan.rest.RestModule;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CategoryModule implements RestModule {
+public record CategoryDisplay(Category category, Set<TopicDisplay> topicDisplays) {
 
-    private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
+    public static CategoryDisplay fromCategory(Category category, Repository<Topic> topicRepository, Repository<Post> postRepository) {
+        Set<TopicDisplay> topicDisplays = new HashSet<>();
 
-    private final static Repository<Topic> TOPIC_REPOSITORY = REPOSITORY_REGISTRY.repository(Topic.class);
-    private final static Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
+        for (Topic topic : topicRepository.findAllSync()) {
+            if (!topic.category().id().equals(category.id())) {
+                continue;
+            }
 
-    @Override
-    public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Category.class)
-                .get()
-                .listAll()
-                .handleGet("/displays", ((mapper, repository, params) -> {
-                    Set<CategoryDisplay> displays = new HashSet<>();
-                    for (Category category : repository.findAllSync()) {
-                        displays.add(CategoryDisplay.fromCategory(category, TOPIC_REPOSITORY, POST_REPOSITORY));
-                    }
+            topicDisplays.add(TopicDisplay.fromTopic(topic, postRepository));
+        }
 
-                    return mapper.writeValueAsString(displays);
-                }));
+        return new CategoryDisplay(category, topicDisplays);
     }
 }

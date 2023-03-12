@@ -22,38 +22,19 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.data.category;
+package me.orlando.pixelchan.data.display;
 
-import me.orlando.pixelchan.data.display.CategoryDisplay;
 import me.orlando.pixelchan.data.post.Post;
 import me.orlando.pixelchan.data.topic.Topic;
 import me.orlando.pixelchan.repository.Repository;
-import me.orlando.pixelchan.repository.RepositoryRegistry;
-import me.orlando.pixelchan.rest.RestApplicationBinder;
-import me.orlando.pixelchan.rest.RestModule;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CategoryModule implements RestModule {
+public record TopicDisplay(Topic topic, Set<Post> posts) {
 
-    private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
-
-    private final static Repository<Topic> TOPIC_REPOSITORY = REPOSITORY_REGISTRY.repository(Topic.class);
-    private final static Repository<Post> POST_REPOSITORY = REPOSITORY_REGISTRY.repository(Post.class);
-
-    @Override
-    public void configure(RestApplicationBinder binder) {
-        binder.bindModel(Category.class)
-                .get()
-                .listAll()
-                .handleGet("/displays", ((mapper, repository, params) -> {
-                    Set<CategoryDisplay> displays = new HashSet<>();
-                    for (Category category : repository.findAllSync()) {
-                        displays.add(CategoryDisplay.fromCategory(category, TOPIC_REPOSITORY, POST_REPOSITORY));
-                    }
-
-                    return mapper.writeValueAsString(displays);
-                }));
+    public static TopicDisplay fromTopic(Topic topic, Repository<Post> postRepository) {
+        return new TopicDisplay(topic, new HashSet<>(postRepository.findAllSync()));
     }
+
 }

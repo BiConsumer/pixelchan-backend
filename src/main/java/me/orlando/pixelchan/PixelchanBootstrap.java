@@ -43,35 +43,44 @@ import world.pokeland.cosmetics.repository.FileRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 
 public class PixelchanBootstrap {
 
     private final static RepositoryRegistry REPOSITORY_REGISTRY = RepositoryRegistry.getInstance();
+    private final static ObjectMapper MAPPER = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
     public static void main(String[] args) throws ParseException, IOException {
-        ObjectMapper mapper = new ObjectMapper()
-                .configure(SerializationFeature.INDENT_OUTPUT, true);
+        File configFile = new File("config.json");
 
-        Repository<Category> categoryRepository = new FileRepository<>(new File("categories"), mapper, Category.class);
-        Repository<Topic> topicRepository = new FileRepository<>(new File("topics"), mapper, Topic.class);
-        Repository<Post> postRepository = new FileRepository<>(new File("posts"), mapper, Post.class);
+        if (!configFile.exists()) {
+            Files.copy(
+                    PixelchanBootstrap.class.getClassLoader().getResourceAsStream("config.json"),
+                    configFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            ;
+        }
+
+        PixelchanConfig config = MAPPER.readValue(
+                configFile,
+                PixelchanConfig.class
+        );
+
+        Repository<Category> categoryRepository = new FileRepository<>(new File("categories"), MAPPER, Category.class);
+        Repository<Topic> topicRepository = new FileRepository<>(new File("topics"), MAPPER, Topic.class);
+        Repository<Post> postRepository = new FileRepository<>(new File("posts"), MAPPER, Post.class);
 
         REPOSITORY_REGISTRY
                 .register(Category.class, categoryRepository)
                 .register(Topic.class, topicRepository)
                 .register(Post.class, postRepository);
 
-        PixelchanConfig config = mapper.readValue(
-                PixelchanBootstrap.class.getClassLoader().getResource("config.json"),
-                PixelchanConfig.class
-        );
-
         for (CategoryConfig category : config.categories()) {
             categoryRepository.saveSync(ModelFactory.category(category.name()));
         }
 
-        RestApplication restApplication = RestApplication.sparkApplication(config.address(), config.port(), mapper, binder -> {
+        RestApplication restApplication = RestApplication.sparkApplication(config.address(), config.port(), MAPPER, binder -> {
             binder.bindRepository(Category.class, categoryRepository);
             binder.bindRepository(Topic.class, topicRepository);
             binder.bindRepository(Post.class, postRepository);

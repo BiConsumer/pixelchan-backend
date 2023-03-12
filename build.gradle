@@ -9,6 +9,12 @@ java {
     }
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': "me.orlando.pixelchan.PixelchanBootstrap"
+    }
+}
+
 group 'me.orlando.pixelchan'
 version '1.0-SNAPSHOT'
 

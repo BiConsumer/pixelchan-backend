@@ -27,6 +27,7 @@ package me.orlando.pixelchan;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import me.orlando.pixelchan.config.CategoryConfig;
+import me.orlando.pixelchan.config.PixelchanConfig;
 import me.orlando.pixelchan.data.category.Category;
 import me.orlando.pixelchan.data.category.CategoryModule;
 import me.orlando.pixelchan.data.post.Post;
@@ -61,16 +62,16 @@ public class PixelchanBootstrap {
                 .register(Topic.class, topicRepository)
                 .register(Post.class, postRepository);
 
-        CategoryConfig[] categories = mapper.readValue(
-                PixelchanBootstrap.class.getClassLoader().getResource("categories.json"),
-                CategoryConfig[].class
+        PixelchanConfig config = mapper.readValue(
+                PixelchanBootstrap.class.getClassLoader().getResource("config.json"),
+                PixelchanConfig.class
         );
 
-        for (CategoryConfig category : categories) {
+        for (CategoryConfig category : config.categories()) {
             categoryRepository.saveSync(ModelFactory.category(category.name()));
         }
 
-        RestApplication restApplication = RestApplication.sparkApplication(5000, mapper, binder -> {
+        RestApplication restApplication = RestApplication.sparkApplication(config.address(), config.port(), mapper, binder -> {
             binder.bindRepository(Category.class, categoryRepository);
             binder.bindRepository(Topic.class, topicRepository);
             binder.bindRepository(Post.class, postRepository);

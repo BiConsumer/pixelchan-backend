@@ -22,29 +22,7 @@
  * SOFTWARE.
  */
 
-package me.orlando.pixelchan.rest;
+package me.orlando.pixelchan.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.function.Consumer;
-
-public interface RestApplication {
-
-    RestApplicationBinder binder();
-
-    void initiate();
-
-    void shutdown();
-
-    static RestApplication sparkApplication(
-            String address,
-            int port,
-            ObjectMapper mapper,
-            Consumer<RestApplicationBinder> consumer
-    ) {
-        RestApplication application = new SparkRestApplication(address, port, mapper);
-        consumer.accept(application.binder());
-
-        return application;
-    }
+public record PixelchanConfig(String address, int port, CategoryConfig[] categories) {
 }

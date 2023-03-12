@@ -77,7 +77,7 @@ public class PixelchanBootstrapTest {
         ObjectMapper mapper = new ObjectMapper()
                 .configure(SerializationFeature.INDENT_OUTPUT, true);
 
-        RestApplication restApplication = RestApplication.sparkApplication(5000, mapper, binder -> {
+        RestApplication restApplication = RestApplication.sparkApplication("127.0.0.1", 5000, mapper, binder -> {
             binder.bindRepository(Category.class, categoryRepository);
             binder.bindRepository(Topic.class, topicRepository);
             binder.bindRepository(Post.class, postRepository);

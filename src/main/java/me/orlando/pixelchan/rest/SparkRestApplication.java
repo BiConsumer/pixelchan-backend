@@ -31,10 +31,12 @@ import spark.Spark;
 
 public class SparkRestApplication implements RestApplication {
 
+    private final String address;
     private final int port;
     private final SparkRestApplicationBinder binder;
 
-    SparkRestApplication(int port, ObjectMapper mapper) {
+    SparkRestApplication(String address, int port, ObjectMapper mapper) {
+        this.address = address;
         this.port = port;
         binder = new SparkRestApplicationBinder(mapper);
     }
@@ -46,6 +48,7 @@ public class SparkRestApplication implements RestApplication {
 
     @Override
     public void initiate() {
+        Spark.ipAddress(this.address);
         Spark.port(this.port);
 
         for (SparkRestModelBinding<? extends Model> binding : binder.bindings()) {

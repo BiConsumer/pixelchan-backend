@@ -69,7 +69,7 @@ public class ReferenceTest {
         String postRaw = "{\n" +
                 "  \"id\" : \"1dc614b1-0e8a-43ea-9d54-fd8e872a5932\",\n" +
                 "  \"createdAt\" : 1677388683551,\n" +
-                "  \"thread\" : \"" + TOPIC.id() + "\",\n" +
+                "  \"topic\" : \"" + TOPIC.id() + "\",\n" +
                 "  \"content\" : \"funny\"\n" +
                 "}";
 

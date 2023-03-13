@@ -1,5 +1,5 @@
 {
-  "address": "127.0.0.1",
+  "address": "localhost",
   "port": 5000,
   "categories": [
     {
@@ -7,6 +7,21 @@
     },
     {
       "name": "Confessions"
+    },
+    {
+      "name": "Introductions"
+    },
+    {
+      "name": "Pets"
+    },
+    {
+      "name": "Memes"
+    },
+    {
+      "name": "Food"
+    },
+    {
+      "name": "Video_Games"
     }
   ]
 }

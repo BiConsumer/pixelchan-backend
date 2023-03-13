@@ -34,7 +34,17 @@ import java.util.Set;
 public record TopicDisplay(Topic topic, Set<Post> posts) {
 
     public static TopicDisplay fromTopic(Topic topic, Repository<Post> postRepository) {
-        return new TopicDisplay(topic, new HashSet<>(postRepository.findAllSync()));
+        Set<Post> posts = new HashSet<>();
+
+        for (Post post : postRepository.findAllSync()) {
+            if (!post.topic().id().equals(topic.id())) {
+                continue;
+            }
+
+            posts.add(post);
+        }
+
+        return new TopicDisplay(topic, posts);
     }
 
 }

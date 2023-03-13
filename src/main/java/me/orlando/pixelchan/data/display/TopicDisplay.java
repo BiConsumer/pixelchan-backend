@@ -37,6 +37,10 @@ public record TopicDisplay(Topic topic, Set<Post> posts) {
         Set<Post> posts = new HashSet<>();
 
         for (Post post : postRepository.findAllSync()) {
+            if (post.topic() == null) {
+                continue;
+            }
+
             if (!post.topic().id().equals(topic.id())) {
                 continue;
             }
